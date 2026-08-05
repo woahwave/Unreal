@@ -21,7 +21,7 @@ local function downloadFile(path, func)
 		for attempt = 1, 4 do
 			local suc, res = pcall(function()
 				if isBedwars then
-					return game:HttpGet('https://github.com/woahwave/Unreal/-/raw/main/bedwars.lua', true)
+					return game:HttpGet('https://raw.githubusercontent.com/woahwave/Unreal/main/bedwars.lua', true)
 				end
 				return game:HttpGet('https://raw.githubusercontent.com/woahwave/Unreal/main/'..relPath, true)
 			end)

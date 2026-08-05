@@ -552,78 +552,28 @@ run(function()
 	end
 
 	function whitelist:update(first)
-		local suc = pcall(function()
-			whitelist.textdata = game:HttpGet('https://raw.githubusercontent.com/woahwave/Unreal/refs/heads/main/PlayerWhitelist.json', true)
-		end)
-		if not suc or not whitelist.get then return true end
+		-- Whitelist loading is disabled for now (no remote JSON fetch).
+		if not whitelist.get then return true end
 		whitelist.loaded = true
+		whitelist.localprio = whitelist:get(lplr)
 
-		if not first or whitelist.textdata ~= whitelist.olddata then
-			if not first then
-				whitelist.olddata = isfile('Unreal/profiles/whitelist.json') and readfile('Unreal/profiles/whitelist.json') or nil
-			end
-
-			local suc, res = pcall(function()
-				return httpService:JSONDecode(whitelist.textdata)
+		if not whitelist.connection then
+			whitelist.connection = playersService.PlayerAdded:Connect(function(v)
+				whitelist:playeradded(v, true)
 			end)
-
-			whitelist.data = suc and type(res) == 'table' and res or whitelist.data
-			whitelist.data.WhitelistedUsers = whitelist.data.WhitelistedUsers or {}
-			whitelist.data.BlacklistedUsers = whitelist.data.BlacklistedUsers or {}
-			whitelist.localprio = whitelist:get(lplr)
-
-			for _, v in whitelist.data.WhitelistedUsers do
-				if v.tags then
-					for _, tag in v.tags do
-						tag.color = Color3.fromRGB(unpack(tag.color))
-					end
-				end
-			end
-
-			if not whitelist.connection then
-				whitelist.connection = playersService.PlayerAdded:Connect(function(v)
-					whitelist:playeradded(v, true)
-				end)
-				vape:Clean(whitelist.connection)
-			end
-
-			for _, v in playersService:GetPlayers() do
-				whitelist:playeradded(v)
-			end
-
-			if entitylib.Running and vape.Loaded then
-				entitylib.refresh()
-			end
-
-			if whitelist.textdata ~= whitelist.olddata then
-				if whitelist.data.Announcement and (whitelist.data.Announcement.expiretime or 0) > os.time() then
-					local targets = whitelist.data.Announcement.targets
-					targets = targets == 'all' and {tostring(lplr.UserId)} or targets:split(',')
-
-					if table.find(targets, tostring(lplr.UserId)) then
-						local hint = Instance.new('Hint')
-						hint.Text = 'VAPE ANNOUNCEMENT: '..whitelist.data.Announcement.text
-						hint.Parent = workspace
-						game:GetService('Debris'):AddItem(hint, 20)
-					end
-				end
-				whitelist.olddata = whitelist.textdata
-				pcall(function()
-					writefile('Unreal/profiles/whitelist.json', whitelist.textdata)
-				end)
-			end
-
-			if whitelist.data.KillVape then
-				vape:Uninject()
-				return true
-			end
-
-			if whitelist.data.BlacklistedUsers[tostring(lplr.UserId)] then
-				task.spawn(lplr.kick, lplr, whitelist.data.BlacklistedUsers[tostring(lplr.UserId)])
-				return true
-			end
+			vape:Clean(whitelist.connection)
 		end
+
+		for _, v in playersService:GetPlayers() do
+			whitelist:playeradded(v)
+		end
+
+		if entitylib.Running and vape.Loaded then
+			entitylib.refresh()
+		end
+		return true
 	end
+
 
 	whitelist.commands = {
 		crash = function()

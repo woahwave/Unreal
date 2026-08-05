@@ -7554,7 +7554,7 @@ shared.bedwars = {
 -- GitLab's commits API names the sha field 'id' (GitHub/Codeberg call it 'sha').
 local function fetchBedwarsCommit()
     local suc, res = pcall(function()
-        return game:HttpGet('https://gitlab.com/api/v4/projects/Unreal%2FUnreal/repository/commits?path=bedwars.lua&ref_name=main&per_page=1', true)
+        return game:HttpGet('https://gitlab.com/api/v4/projects/woahwave%2FUnreal/repository/commits?path=bedwars.lua&ref_name=main&per_page=1', true)
     end)
     if not (suc and res and res ~= '' and res ~= '404: Not Found') then return nil end
     local dsuc, body = pcall(function()
@@ -7594,8 +7594,8 @@ local function downloadBedwars()
     for attempt = 1, 4 do
         local suc, res = pcall(function()
             local url = latest
-                and ('https://github.com/woahwave/Unreal/-/raw/'..latest..'/bedwars.lua')
-                or 'https://github.com/woahwave/Unreal/-/raw/main/bedwars.lua'
+                and ('https://raw.githubusercontent.com/woahwave/Unreal/'..latest..'/bedwars.lua')
+                or 'https://raw.githubusercontent.com/woahwave/Unreal/main/bedwars.lua'
             return game:HttpGet(url, true)
         end)
         -- loadstring compile check: during a host outage HttpGet can hand back the 503/error
