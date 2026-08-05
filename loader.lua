@@ -1,14 +1,14 @@
--- Two loader instances booting at once -- a double-tapped execute, or re-executing while
+﻿-- Two loader instances booting at once -- a double-tapped execute, or re-executing while
 -- the first run is still holding on the ROBLOX loading screen -- would stack two identical
 -- consoles and run every prompt and download twice (the hidden one's questions then time
 -- out to their fallbacks and replay after the visible one closes). Later executions bail
 -- while a boot is live; the timestamp goes stale after 180s so a boot that hard-crashed
 -- can't lock the session out of ever injecting again.
-if shared.PistonwareLoaderBoot and os.clock() - shared.PistonwareLoaderBoot < 180 then
-	warn('[pistonware] loader is already running, ignoring duplicate execution')
+if shared.UnrealLoaderBoot and os.clock() - shared.UnrealLoaderBoot < 180 then
+	warn('[Unreal] loader is already running, ignoring duplicate execution')
 	return
 end
-shared.PistonwareLoaderBoot = os.clock()
+shared.UnrealLoaderBoot = os.clock()
 
 local isfile = isfile or function(file)
 	local suc, res = pcall(function()
@@ -33,7 +33,7 @@ local function downloadFile(path, func)
 		-- bedwars.lua only exists in the GitLab repo (kept separate/obfuscated there), at that
 		-- repo's ROOT even though it caches locally under games/; everything else lives in the
 		-- GitHub repo.
-		local relPath = select(1, path:gsub('pistonware/', ''))
+		local relPath = select(1, path:gsub('Unreal/', ''))
 		local isBedwars = relPath == 'games/bedwars.lua'
 		-- Retried a few times: raw file hosts intermittently fail, returning an empty body that
 		-- would otherwise get cached as a corrupt/empty file.
@@ -41,9 +41,9 @@ local function downloadFile(path, func)
 		for attempt = 1, 4 do
 			local suc, res = pcall(function()
 				if isBedwars then
-					return game:HttpGet('https://gitlab.com/pistonware/pistonware/-/raw/main/bedwars.lua', true)
+					return game:HttpGet('https://github.com/woahwave/Unreal/-/raw/main/bedwars.lua', true)
 				end
-				return game:HttpGet('https://raw.githubusercontent.com/themagicpiston/pistonware/main/'..relPath, true)
+				return game:HttpGet('https://raw.githubusercontent.com/woahwave/Unreal/main/'..relPath, true)
 			end)
 			-- For .lua files, a compile check too: an outage can hand back the 503/error page
 			-- as the body, and caching that would poison the install silently (cache-first
@@ -71,7 +71,7 @@ end
 -- Pass a commit sha as `ref` to get the listing exactly as of that commit instead of branch head.
 local function fetchProfilesListing(ref)
 	local reqSuc, res = pcall(function()
-		return game:HttpGet('https://api.github.com/repos/themagicpiston/pistonware/contents/profiles'..(ref and ('?ref='..ref) or ''), true)
+		return game:HttpGet('https://api.github.com/repos/woahwave/Unreal/contents/profiles'..(ref and ('?ref='..ref) or ''), true)
 	end)
 	if not (reqSuc and res and res ~= '404: Not Found') then return nil end
 	local bodySuc, body = pcall(function()
@@ -127,10 +127,10 @@ local function downloadProfilesListing(body, commit, onProgress)
 				pcall(function()
 					for attempt = 1, 4 do
 						local suc, res = pcall(function()
-							return game:HttpGet('https://raw.githubusercontent.com/themagicpiston/pistonware/'..commit..'/'..relPath, true)
+							return game:HttpGet('https://raw.githubusercontent.com/woahwave/Unreal/'..commit..'/'..relPath, true)
 						end)
 						if suc and res and res ~= '' and res ~= '404: Not Found' then
-							writefile('pistonware/'..relPath, mergeGuiState('pistonware/'..relPath, res))
+							writefile('Unreal/'..relPath, mergeGuiState('Unreal/'..relPath, res))
 							break
 						end
 						if attempt < 4 then
@@ -139,7 +139,7 @@ local function downloadProfilesListing(body, commit, onProgress)
 					end
 				end)
 			else
-				pcall(downloadFile, 'pistonware/'..relPath)
+				pcall(downloadFile, 'Unreal/'..relPath)
 			end
 			completed += 1
 			pending -= 1
@@ -160,7 +160,7 @@ end
 -- Returns the sha of the most recent commit that touched profiles/ on GitHub, or nil on failure.
 local function fetchProfilesCommit()
 	local reqSuc, res = pcall(function()
-		return game:HttpGet('https://api.github.com/repos/themagicpiston/pistonware/commits?path=profiles&sha=main&per_page=1', true)
+		return game:HttpGet('https://api.github.com/repos/woahwave/Unreal/commits?path=profiles&sha=main&per_page=1', true)
 	end)
 	if not (reqSuc and res and res ~= '404: Not Found') then return nil end
 	local bodySuc, body = pcall(function()
@@ -174,7 +174,7 @@ end
 -- One trees API call returns the content sha of EVERY file in the repo, so this costs two
 -- API requests per session no matter how many files exist (a per-file commits lookup would
 -- be one request each and die on GitHub's 60/hour unauthenticated limit).
--- pistonware/filecheck.json remembers the sha each cached file was last downloaded at; any
+-- Unreal/filecheck.json remembers the sha each cached file was last downloaded at; any
 -- mismatch is re-downloaded pinned to the head commit (branch raw URLs can serve stale CDN
 -- content for a few minutes after a push, commit-pinned ones cannot). Files whose watermark
 -- line was removed are developer-owned and never touched -- exactly what the watermark has
@@ -184,19 +184,19 @@ local function updateCachedFiles(onProgress)
 	local httpService = cloneref(game:GetService('HttpService'))
 
 	local headSuc, headSha = pcall(function()
-		return httpService:JSONDecode(game:HttpGet('https://api.github.com/repos/themagicpiston/pistonware/commits?sha=main&per_page=1', true))[1].sha
+		return httpService:JSONDecode(game:HttpGet('https://api.github.com/repos/woahwave/Unreal/commits?sha=main&per_page=1', true))[1].sha
 	end)
 	if not (headSuc and type(headSha) == 'string') then return end
 
 	local treeSuc, tree = pcall(function()
-		return httpService:JSONDecode(game:HttpGet('https://api.github.com/repos/themagicpiston/pistonware/git/trees/'..headSha..'?recursive=1', true))
+		return httpService:JSONDecode(game:HttpGet('https://api.github.com/repos/woahwave/Unreal/git/trees/'..headSha..'?recursive=1', true))
 	end)
 	if not (treeSuc and type(tree) == 'table' and type(tree.tree) == 'table') then return end
 
 	local manifest = {}
 	pcall(function()
-		if isfile('pistonware/filecheck.json') then
-			local decoded = httpService:JSONDecode(readfile('pistonware/filecheck.json'))
+		if isfile('Unreal/filecheck.json') then
+			local decoded = httpService:JSONDecode(readfile('Unreal/filecheck.json'))
 			if type(decoded) == 'table' then
 				manifest = decoded
 			end
@@ -214,7 +214,7 @@ local function updateCachedFiles(onProgress)
 	-- demand, and is picked up by this pass on the session after it first appears.
 	local toUpdate = {}
 	for path, sha in remote do
-		local localPath = 'pistonware/'..path
+		local localPath = 'Unreal/'..path
 		if manifest[path] ~= sha and isfile(localPath) and readfile(localPath):sub(1, #Watermark) == Watermark then
 			table.insert(toUpdate, path)
 		end
@@ -229,7 +229,7 @@ local function updateCachedFiles(onProgress)
 		for path in manifest do
 			if not remote[path] then
 				pcall(function()
-					local localPath = 'pistonware/'..path
+					local localPath = 'Unreal/'..path
 					if isfile(localPath) and readfile(localPath):sub(1, #Watermark) == Watermark then
 						delfile(localPath)
 					end
@@ -247,11 +247,11 @@ local function updateCachedFiles(onProgress)
 			task.spawn(function()
 				for attempt = 1, 4 do
 					local suc, res = pcall(function()
-						return game:HttpGet('https://raw.githubusercontent.com/themagicpiston/pistonware/'..headSha..'/'..select(1, path:gsub(' ', '%%20')), true)
+						return game:HttpGet('https://raw.githubusercontent.com/woahwave/Unreal/'..headSha..'/'..select(1, path:gsub(' ', '%%20')), true)
 					end)
 					-- compile check: never overwrite a working cached file with an error page
 					if suc and res and res ~= '' and res ~= '404: Not Found' and loadstring(res) ~= nil then
-						pcall(writefile, 'pistonware/'..path, Watermark..'\n'..res)
+						pcall(writefile, 'Unreal/'..path, Watermark..'\n'..res)
 						manifest[path] = remote[path]
 						changed = true
 						break
@@ -277,14 +277,14 @@ local function updateCachedFiles(onProgress)
 	end
 
 	if changed then
-		pcall(writefile, 'pistonware/filecheck.json', httpService:JSONEncode(manifest))
+		pcall(writefile, 'Unreal/filecheck.json', httpService:JSONEncode(manifest))
 	end
 end
 
 --[[
 	Loader console
 	--------------
-	A fake terminal window that stands in for the executor console while pistonware boots.
+	A fake terminal window that stands in for the executor console while Unreal boots.
 	The piston face is drawn one row at a time as the boot progresses, so the art is only
 	ever complete at the same moment the status flips to '> DONE'.
 ]]
@@ -375,11 +375,11 @@ local freshInstall = false
 local function deleteInstall()
 	-- every cancel/abort path comes through here, so a cancelled boot immediately frees the
 	-- duplicate-execution guard for the next manual run
-	shared.PistonwareLoaderBoot = nil
+	shared.UnrealLoaderBoot = nil
 	if not freshInstall then return end
 	pcall(function()
 		if delfolder then
-			delfolder('pistonware')
+			delfolder('Unreal')
 			return
 		end
 		local function purge(folder)
@@ -391,7 +391,7 @@ local function deleteInstall()
 				end
 			end
 		end
-		purge('pistonware')
+		purge('Unreal')
 	end)
 end
 
@@ -421,7 +421,7 @@ local function createConsole()
 	local playersService = cloneref(game:GetService('Players'))
 
 	local screen = Instance.new('ScreenGui')
-	screen.Name = 'PistonwareLoader'
+	screen.Name = 'UnrealLoader'
 	screen.DisplayOrder = 999999999
 	screen.IgnoreGuiInset = true
 	screen.ResetOnSpawn = false
@@ -524,7 +524,7 @@ local function createConsole()
 	title.BackgroundTransparency = 1
 	title.Size = UDim2.new(1, -220, 1, 0)
 	title.Position = UDim2.fromOffset(110, 0)
-	title.Text = './pistonware-loader'
+	title.Text = './Unreal-loader'
 	title.TextColor3 = Palette.Title
 	title.TextSize = 18
 	title.Font = Enum.Font.Code
@@ -937,7 +937,7 @@ console:SetStatus('INJECTING')
 console:SetLine('Injecting into ROBLOX...')
 console:SetProgress(0.08)
 
--- Executors known not to run pistonware correctly. Checked before anything is downloaded so
+-- Executors known not to run Unreal correctly. Checked before anything is downloaded so
 -- the run stops on the console instead of failing somewhere deep in the GUI. identifyexecutor
 -- is absent on some executors, hence the pcall -- an unknown name is allowed through.
 do
@@ -952,10 +952,10 @@ do
 			local message = 'Unsupported executor ('..tostring(executorName)..'), please look in the #supported-executors channel for more info.'
 			console:SetStatus('ERROR', '#E15046')
 			console:SetLine(message, Palette.Error)
-			warn('[pistonware] '..message)
+			warn('[Unreal] '..message)
 			-- released so a later execution on a supported executor is not locked out by the
 			-- duplicate-boot guard at the top of this file
-			shared.PistonwareLoaderBoot = nil
+			shared.UnrealLoaderBoot = nil
 			return
 		end
 	end
@@ -964,8 +964,8 @@ end
 -- Decided before the folders are created, while 'did this run create the install' is still
 -- observable. No yield separates this from the console appearing, so a cancel cannot land
 -- in between and read the flag before it is set.
-freshInstall = not isfolder('pistonware')
-for _, folder in {'pistonware', 'pistonware/games', 'pistonware/profiles', 'pistonware/assets', 'pistonware/libraries', 'pistonware/guis'} do
+freshInstall = not isfolder('Unreal')
+for _, folder in {'Unreal', 'Unreal/games', 'Unreal/profiles', 'Unreal/assets', 'Unreal/libraries', 'Unreal/guis'} do
 	if not isfolder(folder) then
 		makefolder(folder)
 	end
@@ -993,7 +993,7 @@ if console:IsAborted() then deleteInstall() return end
 -- reloads (the first manual run this session already did it, and reinjects should stay
 -- fast) and for developers (running local edits is the whole point of developer mode --
 -- and their watermark-stripped files would be skipped anyway).
-if not isReload and not shared.PistonwareDeveloper then
+if not isReload and not shared.UnrealDeveloper then
 	console:SetLine('Checking for updates...')
 	pcall(updateCachedFiles, function(completed, total)
 		console:SetLine('Updating files ('..completed..'/'..total..')...')
@@ -1008,7 +1008,7 @@ console:SetProgress(0.46)
 -- know afterwards whether to show the prompts below.
 local firstRunProfiles = false
 pcall(function()
-	firstRunProfiles = #listfiles('pistonware/profiles') < 3
+	firstRunProfiles = #listfiles('Unreal/profiles') < 3
 end)
 
 -- profilecheck.txt persists a prior 'No' answer, so the download prompt only asks once --
@@ -1016,8 +1016,8 @@ end)
 -- folder stays under 3 files forever if nothing gets downloaded).
 local declinedDownload = false
 pcall(function()
-	if isfile('pistonware/profiles/profilecheck.txt') then
-		declinedDownload = readfile('pistonware/profiles/profilecheck.txt') == 'false'
+	if isfile('Unreal/profiles/profilecheck.txt') then
+		declinedDownload = readfile('Unreal/profiles/profilecheck.txt') == 'false'
 	end
 end)
 
@@ -1035,7 +1035,7 @@ if firstRunProfiles and not declinedDownload then
 	if console:IsAborted() then deleteInstall() return end
 	wantsDownload = ok and res == true
 	if not wantsDownload then
-		pcall(function() writefile('pistonware/profiles/profilecheck.txt', 'false') end)
+		pcall(function() writefile('Unreal/profiles/profilecheck.txt', 'false') end)
 	end
 end
 console:SetProgress(0.53)
@@ -1053,7 +1053,7 @@ if firstRunProfiles and not declinedDownload and wantsDownload then
 		end
 	end)
 	pcall(function()
-		downloadedConfigs = #listfiles('pistonware/profiles') >= 3
+		downloadedConfigs = #listfiles('Unreal/profiles') >= 3
 	end)
 	-- Record which commit this download reflects, so later sessions can tell whether profiles/
 	-- has changed on GitHub since (see the sync prompt below).
@@ -1061,7 +1061,7 @@ if firstRunProfiles and not declinedDownload and wantsDownload then
 		pcall(function()
 			local commit = fetchProfilesCommit()
 			if commit then
-				writefile('pistonware/profiles/profilecommit.txt', commit)
+				writefile('Unreal/profiles/profilecommit.txt', commit)
 			end
 		end)
 	end
@@ -1078,7 +1078,7 @@ if not firstRunProfiles and not declinedDownload and not isReload then
 	local latestCommit, cachedCommit
 	pcall(function()
 		latestCommit = fetchProfilesCommit()
-		cachedCommit = isfile('pistonware/profiles/profilecommit.txt') and readfile('pistonware/profiles/profilecommit.txt'):gsub('%s', '') or nil
+		cachedCommit = isfile('Unreal/profiles/profilecommit.txt') and readfile('Unreal/profiles/profilecommit.txt'):gsub('%s', '') or nil
 	end)
 	if latestCommit and latestCommit ~= cachedCommit then
 		console:SetProgress(0.6)
@@ -1108,7 +1108,7 @@ if not firstRunProfiles and not declinedDownload and not isReload then
 						console:SetLine('Syncing configs ('..completed..'/'..total..')...')
 						console:SetProgress(0.6 + 0.13 * (completed / math.max(total, 1)))
 					end)
-					writefile('pistonware/profiles/profilecommit.txt', latestCommit)
+					writefile('Unreal/profiles/profilecommit.txt', latestCommit)
 				end
 			end)
 			if console:IsAborted() then deleteInstall() return end
@@ -1143,7 +1143,7 @@ if downloadedConfigs then
 end
 
 console:SetProgress(0.8)
-console:SetLine('Loading pistonware...')
+console:SetLine('Loading Unreal...')
 -- Creeps the last couple of rows in while main.lua downloads and builds the GUI, so the face
 -- is still one row short of finished when injection actually completes.
 local injecting = true
@@ -1160,9 +1160,9 @@ task.spawn(function()
 end)
 
 -- pcall'd so a failure surfaces on the console line instead of leaving the window stuck on
--- 'Loading pistonware...'; warn() keeps it in the executor output too.
+-- 'Loading Unreal...'; warn() keeps it in the executor output too.
 local ok, result = pcall(function()
-	return loadstring(downloadFile('pistonware/main.lua'), 'main')()
+	return loadstring(downloadFile('Unreal/main.lua'), 'main')()
 end)
 injecting = false
 -- Consumed only now: main.lua reads the flag itself while loading (it suppresses the 'Finished
@@ -1170,7 +1170,7 @@ injecting = false
 -- since main.lua never clears it and the next teleport/reinject sets it again anyway.
 shared.vapereload = nil
 -- Boot is over (successfully or not) -- reinjects and later manual runs may proceed.
-shared.PistonwareLoaderBoot = nil
+shared.UnrealLoaderBoot = nil
 
 -- Cancelled while the GUI was already building: tear that back down too, then wipe whatever
 -- the run wrote after cancel's first pass.
@@ -1187,7 +1187,7 @@ if ok then
 	console:Finish('Injected successfully.', 5)
 	return result
 end
-warn('[pistonware] '..tostring(result))
+warn('[Unreal] '..tostring(result))
 -- Copied as well as printed: the message is long, full of executor paths, and the person
 -- hitting it is usually being asked to report it. Done here rather than inside console:Fail so
 -- a headless reload (which has no window to read) still leaves it on the clipboard.

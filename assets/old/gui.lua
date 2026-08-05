@@ -1,4 +1,4 @@
-local mainapi = {
+﻿local mainapi = {
 	Categories = {},
 	GUIColor = {
 		Hue = 0.46,
@@ -59,25 +59,25 @@ local uipallet = {
 }
 
 local getcustomassets = {
-	['pistonware/assets/old/barlogo.png'] = 'rbxasset://barlogo.png',
-	['pistonware/assets/old/blatanticon.png'] = 'rbxasset://blatanticon.png',
-	['pistonware/assets/old/checkbox.png'] = 'rbxasset://checkbox.png',
-	['pistonware/assets/old/combaticon.png'] = 'rbxasset://combaticon.png',
-	['pistonware/assets/old/friendsicon.png'] = 'rbxasset://friendsicon.png',
-	['pistonware/assets/old/guiicon.png'] = 'rbxasset://guiicon.png',
-	['pistonware/assets/old/info.png'] = 'rbxasset://info.png',
-	['pistonware/assets/old/pin.png'] = 'rbxasset://pin.png',
-	['pistonware/assets/old/profilesicon.png'] = 'rbxasset://profilesicon.png',
-	['pistonware/assets/old/rendericon.png'] = 'rbxasset://rendericon.png',
-	['pistonware/assets/old/search.png'] = 'rbxasset://search.png',
-	['pistonware/assets/old/settingsicon.png'] = 'rbxasset://settingsicon.png',
-	['pistonware/assets/old/targetinfoicon.png'] = 'rbxasset://targetinfoicon.png',
-	['pistonware/assets/old/textguiicon.png'] = 'rbxasset://textguiicon.png',
-	['pistonware/assets/old/textv4.png'] = 'rbxasset://textv4.png',
-	['pistonware/assets/old/textvape.png'] = 'rbxasset://textvape.png',
-	['pistonware/assets/old/utilityicon.png'] = 'rbxasset://utilityicon.png',
-	['pistonware/assets/old/vape.png'] = 'rbxassetid://14373395239',
-	['pistonware/assets/old/worldicon.png'] = 'rbxasset://worldicon.png'
+	['Unreal/assets/old/barlogo.png'] = 'rbxasset://barlogo.png',
+	['Unreal/assets/old/blatanticon.png'] = 'rbxasset://blatanticon.png',
+	['Unreal/assets/old/checkbox.png'] = 'rbxasset://checkbox.png',
+	['Unreal/assets/old/combaticon.png'] = 'rbxasset://combaticon.png',
+	['Unreal/assets/old/friendsicon.png'] = 'rbxasset://friendsicon.png',
+	['Unreal/assets/old/guiicon.png'] = 'rbxasset://guiicon.png',
+	['Unreal/assets/old/info.png'] = 'rbxasset://info.png',
+	['Unreal/assets/old/pin.png'] = 'rbxasset://pin.png',
+	['Unreal/assets/old/profilesicon.png'] = 'rbxasset://profilesicon.png',
+	['Unreal/assets/old/rendericon.png'] = 'rbxasset://rendericon.png',
+	['Unreal/assets/old/search.png'] = 'rbxasset://search.png',
+	['Unreal/assets/old/settingsicon.png'] = 'rbxasset://settingsicon.png',
+	['Unreal/assets/old/targetinfoicon.png'] = 'rbxasset://targetinfoicon.png',
+	['Unreal/assets/old/textguiicon.png'] = 'rbxasset://textguiicon.png',
+	['Unreal/assets/old/textv4.png'] = 'rbxasset://textv4.png',
+	['Unreal/assets/old/textvape.png'] = 'rbxasset://textvape.png',
+	['Unreal/assets/old/utilityicon.png'] = 'rbxasset://utilityicon.png',
+	['Unreal/assets/old/vape.png'] = 'rbxassetid://14373395239',
+	['Unreal/assets/old/worldicon.png'] = 'rbxasset://worldicon.png'
 }
 
 local isfile = isfile or function(file)
@@ -221,7 +221,7 @@ local function downloadFile(path, func)
 	if not isfile(path) then
 		createDownloader(path)
 		local suc, res = pcall(function()
-			return game:HttpGet('https://raw.githubusercontent.com/pistonware/pistonware/main/'..select(1, path:gsub('pistonware/', '')), true)
+			return game:HttpGet('https://raw.githubusercontent.com/Unreal/Unreal/main/'..select(1, path:gsub('Unreal/', '')), true)
 		end)
 		if not suc or res == '404: Not Found' then
 			error(res)
@@ -310,7 +310,7 @@ local function removeTags(str)
 end
 
 do
-	local res = isfile('pistonware/profiles/color.txt') and loadJson('pistonware/profiles/color.txt')
+	local res = isfile('Unreal/profiles/color.txt') and loadJson('Unreal/profiles/color.txt')
 	if res then
 		uipallet.Main = res.Main and Color3.fromRGB(unpack(res.Main)) or uipallet.Main
 		uipallet.Text = res.Text and Color3.fromRGB(unpack(res.Text)) or uipallet.Text
@@ -486,7 +486,7 @@ function mainapi:CreateBar()
 	logo.Size = UDim2.fromOffset(92, 25)
 	logo.Position = UDim2.fromOffset(11, 8)
 	logo.BackgroundTransparency = 1
-	logo.Image = getcustomasset('pistonware/assets/old/barlogo.png')
+	logo.Image = getcustomasset('Unreal/assets/old/barlogo.png')
 	logo.ImageColor3 = uipallet.Text
 	logo.Parent = bar
 	local settingsbutton = Instance.new('TextButton')
@@ -502,7 +502,7 @@ function mainapi:CreateBar()
 	settingsicon.Size = UDim2.fromOffset(26, 26)
 	settingsicon.Position = UDim2.fromOffset(4, 4)
 	settingsicon.BackgroundTransparency = 1
-	settingsicon.Image = getcustomasset('pistonware/assets/old/settingsicon.png')
+	settingsicon.Image = getcustomasset('Unreal/assets/old/settingsicon.png')
 	settingsicon.ImageColor3 = uipallet.Text
 	settingsicon.Parent = settingsbutton
 	local children = Instance.new('Frame')
@@ -519,7 +519,7 @@ function mainapi:CreateBar()
 	local searchbutton = settingsbutton:Clone()
 	searchbutton.Position = UDim2.fromOffset(144, 4)
 	searchbutton.Parent = bar
-	searchbutton.ImageLabel.Image = getcustomasset('pistonware/assets/old/search.png')
+	searchbutton.ImageLabel.Image = getcustomasset('Unreal/assets/old/search.png')
 
 	function categoryapi:CreateBind()
 		local optionapi = {}
@@ -1259,7 +1259,7 @@ function mainapi:CreateOverlay(categorysettings)
 	pin.Position = UDim2.new(1, -23, 0, 11)
 	pin.BackgroundTransparency = 1
 	pin.AutoButtonColor = false
-	pin.Image = getcustomasset('pistonware/assets/old/pin.png')
+	pin.Image = getcustomasset('Unreal/assets/old/pin.png')
 	pin.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 	pin.Parent = window
 	local customchildren = Instance.new('Frame')
@@ -1451,8 +1451,8 @@ function mainapi:CreateCategoryList(categorysettings)
 				if ind then
 					if val ~= 'default' then
 						table.remove(mainapi.Profiles, ind)
-						if isfile('pistonware/profiles/'..val..mainapi.Place..'.txt') and delfile then
-							delfile('pistonware/profiles/'..val..mainapi.Place..'.txt')
+						if isfile('Unreal/profiles/'..val..mainapi.Place..'.txt') and delfile then
+							delfile('Unreal/profiles/'..val..mainapi.Place..'.txt')
 						end
 					end
 				else
@@ -1578,7 +1578,7 @@ function mainapi:CreateCategoryList(categorysettings)
 				local objectdotin = Instance.new('ImageLabel')
 				objectdotin.Size = UDim2.fromScale(1, 1)
 				objectdotin.BackgroundTransparency = 1
-				objectdotin.Image = getcustomasset('pistonware/assets/old/checkbox.png')
+				objectdotin.Image = getcustomasset('Unreal/assets/old/checkbox.png')
 				objectdotin.ImageColor3 = uipallet.Text
 				objectdotin.Parent = objectdot
 				local objecttitle = Instance.new('TextLabel')
@@ -1717,7 +1717,7 @@ function mainapi:CreateNotification(title, text, duration, type)
 		iconshadow.Position = UDim2.fromOffset(1, 3)
 		iconshadow.ZIndex = 5
 		iconshadow.BackgroundTransparency = 1
-		iconshadow.Image = getcustomasset('pistonware/assets/old/info.png')
+		iconshadow.Image = getcustomasset('Unreal/assets/old/info.png')
 		iconshadow.ImageColor3 = Color3.new()
 		iconshadow.ImageTransparency = 0.5
 		iconshadow.Parent = notification
@@ -1792,8 +1792,8 @@ function mainapi:Load(skipgui, profile)
 	local guidata = {}
 	local savecheck = true
 
-	if isfile('pistonware/profiles/'..game.GameId..'.gui.txt') then
-		guidata = loadJson('pistonware/profiles/'..game.GameId..'.gui.txt')
+	if isfile('Unreal/profiles/'..game.GameId..'.gui.txt') then
+		guidata = loadJson('Unreal/profiles/'..game.GameId..'.gui.txt')
 		if not guidata then
 			guidata = {Categories = {}}
 			self:CreateNotification('Vape', 'Failed to load GUI settings.', 10, 'alert')
@@ -1836,8 +1836,8 @@ function mainapi:Load(skipgui, profile)
 	}}
 	self.Categories.Profiles:ChangeValue()
 
-	if isfile('pistonware/profiles/'..self.Profile..self.Place..'.txt') then
-		local savedata = loadJson('pistonware/profiles/'..self.Profile..self.Place..'.txt')
+	if isfile('Unreal/profiles/'..self.Profile..self.Place..'.txt') then
+		local savedata = loadJson('Unreal/profiles/'..self.Profile..self.Place..'.txt')
 		if not savedata then
 			savedata = {
 				Categories = {},
@@ -1923,7 +1923,7 @@ function mainapi:Load(skipgui, profile)
 		image.Size = UDim2.fromOffset(26, 26)
 		image.Position = UDim2.fromOffset(3, 3)
 		image.BackgroundTransparency = 1
-		image.Image = getcustomasset('pistonware/assets/old/vape.png')
+		image.Image = getcustomasset('Unreal/assets/old/vape.png')
 		image.Parent = button
 		self.VapeButton = button
 		button.MouseButton1Click:Connect(function()
@@ -2016,8 +2016,8 @@ function mainapi:Save(newprofile)
 		}
 	end
 
-	writefile('pistonware/profiles/'..game.GameId..'.gui.txt', httpService:JSONEncode(guidata))
-	writefile('pistonware/profiles/'..self.Profile..self.Place..'.txt', httpService:JSONEncode(savedata))
+	writefile('Unreal/profiles/'..game.GameId..'.gui.txt', httpService:JSONEncode(guidata))
+	writefile('Unreal/profiles/'..self.Profile..self.Place..'.txt', httpService:JSONEncode(savedata))
 end
 
 function mainapi:SaveOptions(object, savedoptions)
@@ -2167,45 +2167,45 @@ end))
 
 mainapi:CreateCategory({
 	Name = 'GUI',
-	Icon = getcustomasset('pistonware/assets/old/guiicon.png')
+	Icon = getcustomasset('Unreal/assets/old/guiicon.png')
 })
 local combat = mainapi:CreateCategory({
 	Name = 'Combat',
-	Icon = getcustomasset('pistonware/assets/old/combaticon.png')
+	Icon = getcustomasset('Unreal/assets/old/combaticon.png')
 })
 mainapi:CreateCategory({
 	Name = 'Blatant',
-	Icon = getcustomasset('pistonware/assets/old/blatanticon.png'),
+	Icon = getcustomasset('Unreal/assets/old/blatanticon.png'),
 	WindowSize = 164
 })
 mainapi:CreateCategory({
 	Name = 'Render',
-	Icon = getcustomasset('pistonware/assets/old/rendericon.png'),
+	Icon = getcustomasset('Unreal/assets/old/rendericon.png'),
 	WindowSize = 196
 })
 mainapi:CreateCategory({
 	Name = 'Utility',
-	Icon = getcustomasset('pistonware/assets/old/utilityicon.png'),
+	Icon = getcustomasset('Unreal/assets/old/utilityicon.png'),
 	WindowSize = 164
 })
 mainapi:CreateCategory({
 	Name = 'World',
-	Icon = getcustomasset('pistonware/assets/old/worldicon.png')
+	Icon = getcustomasset('Unreal/assets/old/worldicon.png')
 })
 mainapi:CreateCategory({
 	Name = 'Inventory',
-	Icon = getcustomasset('pistonware/assets/old/worldicon.png')
+	Icon = getcustomasset('Unreal/assets/old/worldicon.png')
 })
 mainapi:CreateCategory({
 	Name = 'Minigames',
-	Icon = getcustomasset('pistonware/assets/old/worldicon.png')
+	Icon = getcustomasset('Unreal/assets/old/worldicon.png')
 })
 mainapi.Legit = mainapi:CreateLegit({
 	Name = 'Legit'
 })
 local settingspane = mainapi:CreateCategory({
 	Name = 'Settings',
-	Icon = getcustomasset('pistonware/assets/old/settingsicon.png'),
+	Icon = getcustomasset('Unreal/assets/old/settingsicon.png'),
 	WindowSize = 166
 })
 
@@ -2221,7 +2221,7 @@ local friendscolor = {
 }
 local friendssettings = {
 	Name = 'Friends',
-	Icon = getcustomasset('pistonware/assets/old/friendsicon.png'),
+	Icon = getcustomasset('Unreal/assets/old/friendsicon.png'),
 	Placeholder = 'Roblox username',
 	WindowSize = 250,
 	Function = function()
@@ -2266,7 +2266,7 @@ mainapi:Clean(friends.ColorUpdate)
 ]]
 mainapi:CreateCategoryList({
 	Name = 'Profiles',
-	Icon = getcustomasset('pistonware/assets/old/profilesicon.png'),
+	Icon = getcustomasset('Unreal/assets/old/profilesicon.png'),
 	Placeholder = 'Type name',
 	WindowSize = 250,
 	Profiles = true
@@ -2278,7 +2278,7 @@ mainapi:CreateCategoryList({
 local targets
 targets = mainapi:CreateCategoryList({
 	Name = 'Targets',
-	Icon = getcustomasset('pistonware/assets/old/friendsicon.png'),
+	Icon = getcustomasset('Unreal/assets/old/friendsicon.png'),
 	Placeholder = 'Roblox username',
 	WindowSize = 250,
 	Function = function()
@@ -2427,12 +2427,12 @@ topbar:CreateDropdown({
 	List = inputService.TouchEnabled and {'new', 'old'} or {'new', 'old', 'rise'},
 	Function = function(val, mouse)
 		if mouse then
-			writefile('pistonware/profiles/gui.txt', val)
+			writefile('Unreal/profiles/gui.txt', val)
 			shared.vapereload = true
-			if shared.PistonwareDeveloper then
-				loadstring(readfile('pistonware/loader.lua'), 'loader')()
+			if shared.UnrealDeveloper then
+				loadstring(readfile('Unreal/loader.lua'), 'loader')()
 			else
-				loadstring(game:HttpGet('https://raw.githubusercontent.com/pistonware/pistonware/main/loader.lua', true))()
+				loadstring(game:HttpGet('https://raw.githubusercontent.com/Unreal/Unreal/main/loader.lua', true))()
 			end
 		end
 	end,
@@ -2463,14 +2463,14 @@ topbar:CreateButton({
 	Name = 'Reset current profile',
 	Function = function()
 	mainapi.Save = function() end
-		if isfile('pistonware/profiles/'..mainapi.Profile..mainapi.Place..'.txt') and delfile then
-			delfile('pistonware/profiles/'..mainapi.Profile..mainapi.Place..'.txt')
+		if isfile('Unreal/profiles/'..mainapi.Profile..mainapi.Place..'.txt') and delfile then
+			delfile('Unreal/profiles/'..mainapi.Profile..mainapi.Place..'.txt')
 		end
 		shared.vapereload = true
-		if shared.PistonwareDeveloper then
-			loadstring(readfile('pistonware/loader.lua'), 'loader')()
+		if shared.UnrealDeveloper then
+			loadstring(readfile('Unreal/loader.lua'), 'loader')()
 		else
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/pistonware/pistonware/main/loader.lua', true))()
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/Unreal/Unreal/main/loader.lua', true))()
 		end
 	end,
 	Tooltip = 'This will set your profile to the default settings of Vape'
@@ -2531,10 +2531,10 @@ topbar:CreateButton({
 	Name = 'REINEJCT',
 	Function = function()
 		shared.vapereload = true
-		if shared.PistonwareDeveloper then
-			loadstring(readfile('pistonware/loader.lua'), 'loader')()
+		if shared.UnrealDeveloper then
+			loadstring(readfile('Unreal/loader.lua'), 'loader')()
 		else
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/pistonware/pistonware/main/loader.lua', true))()
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/Unreal/Unreal/main/loader.lua', true))()
 		end
 	end,
 	Tooltip = 'Reloads vape for debugging purposes'
@@ -2707,7 +2707,7 @@ mainapi.Libraries.targetinfo = targetinfo
 
 local textgui = mainapi:CreateOverlay({
 	Name = 'Text GUI',
-	Icon = getcustomasset('pistonware/assets/old/textguiicon.png'),
+	Icon = getcustomasset('Unreal/assets/old/textguiicon.png'),
 	WindowSize = 178,
 	Function = function()
 		mainapi:UpdateTextGUI()
@@ -2795,7 +2795,7 @@ VapeLogo.BackgroundTransparency = 1
 VapeLogo.BorderSizePixel = 0
 VapeLogo.Visible = true
 VapeLogo.BackgroundColor3 = Color3.new()
-VapeLogo.Image = getcustomasset('pistonware/assets/old/textvape.png')
+VapeLogo.Image = getcustomasset('Unreal/assets/old/textvape.png')
 VapeLogo.Parent = textgui.Children
 
 local lastside = textgui.Children.AbsolutePosition.X > (gui.AbsoluteSize.X / 2)
@@ -2817,7 +2817,7 @@ VapeLogoV4.Position = UDim2.new(1, 1, 0, -2)
 VapeLogoV4.BackgroundColor3 = Color3.new()
 VapeLogoV4.BackgroundTransparency = 1
 VapeLogoV4.BorderSizePixel = 0
-VapeLogoV4.Image = getcustomasset('pistonware/assets/old/textv4.png')
+VapeLogoV4.Image = getcustomasset('Unreal/assets/old/textv4.png')
 VapeLogoV4.Parent = VapeLogo
 local VapeLogoShadow = VapeLogo:Clone()
 VapeLogoShadow.Position = UDim2.fromOffset(1, 1)

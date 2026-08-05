@@ -1,4 +1,4 @@
-local optionapi = {
+﻿local optionapi = {
 	Type = 'TextList',
 	List = optionsettings.Default or {},
 	ListEnabled = optionsettings.Default or {},
@@ -80,8 +80,8 @@ function optionapi:ChangeValue(val)
 			if ind then
 				if val ~= 'default' then
 					table.remove(mainapi.Profiles, ind)
-					if isfile('pistonware/profiles/'..val..mainapi.Place..'.txt') and delfile then
-						delfile('pistonware/profiles/'..val..mainapi.Place..'.txt')
+					if isfile('Unreal/profiles/'..val..mainapi.Place..'.txt') and delfile then
+						delfile('Unreal/profiles/'..val..mainapi.Place..'.txt')
 					end
 				end
 			else

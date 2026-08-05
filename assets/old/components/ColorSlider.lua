@@ -1,4 +1,4 @@
-local optionapi = {
+﻿local optionapi = {
 	Type = 'ColorSlider',
 	Hue = optionsettings.DefaultHue or 0.44,
 	Sat = optionsettings.DefaultSat or 1,
@@ -143,7 +143,7 @@ expand.Name = 'Expand'
 expand.Size = UDim2.fromOffset(9, 5)
 expand.Position = UDim2.fromOffset(4, 4)
 expand.BackgroundTransparency = 1
-expand.Image = getcustomasset('pistonware/assets/new/expandicon.png')
+expand.Image = getcustomasset('Unreal/assets/new/expandicon.png')
 expand.ImageColor3 = color.Dark(uipallet.Text, 0.43)
 expand.Parent = expandbutton
 local rainbow = Instance.new('TextButton')

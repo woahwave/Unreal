@@ -1,4 +1,4 @@
-local run = function(func) if shared.VapeSmoothBoot then task.wait() end func() end
+﻿local run = function(func) if shared.VapeSmoothBoot then task.wait() end func() end
 
 local cloneref = cloneref or function(obj)
 	return obj
@@ -79,7 +79,7 @@ local function addBlur(parent)
 	blur.Size = UDim2.new(1, 89, 1, 52)
 	blur.Position = UDim2.fromOffset(-48, -31)
 	blur.BackgroundTransparency = 1
-	blur.Image = getcustomasset('pistonware/assets/new/blur.png')
+	blur.Image = getcustomasset('Unreal/assets/new/blur.png')
 	blur.ScaleType = Enum.ScaleType.Slice
 	blur.SliceCenter = Rect.new(52, 31, 261, 502)
 	blur.Parent = parent
@@ -686,7 +686,7 @@ run(function()
 end)
 entitylib.start()
 
--- pistonware funcs
+-- Unreal funcs
 
 local genv = getgenv()
 -- Idempotent shared-state defaults: fill a key only if a previous execution
@@ -872,7 +872,7 @@ local function safeGetProto(func, index)
     end
 end
 
--- pistonware funcs
+-- Unreal funcs
 
 run(function()
 	local KnitInit, Knit
@@ -1010,7 +1010,7 @@ run(function()
 	for i, v in remoteNames do
 		local remote = dumpRemote(debug.getconstants(v))
 		if remote == '' then
-			--notif('Pistonware', 'Failed to grab remote ('..i..')', 10, 'alert')
+			--notif('Unreal', 'Failed to grab remote ('..i..')', 10, 'alert')
 		end
 		remotes[i] = remote
 	end
@@ -5495,7 +5495,7 @@ run(function()
 		close.Position = UDim2.new(1, -35, 0, 9)
 		close.BackgroundColor3 = Color3.new(1, 1, 1)
 		close.BackgroundTransparency = 1
-		close.Image = getcustomasset('pistonware/assets/new/close.png')
+		close.Image = getcustomasset('Unreal/assets/new/close.png')
 		close.ImageColor3 = color.Light(uipallet.Text, 0.2)
 		close.ImageTransparency = 0.5
 		close.AutoButtonColor = false
@@ -5609,7 +5609,7 @@ run(function()
 		searchicon.Size = UDim2.fromOffset(14, 14)
 		searchicon.Position = UDim2.new(1, -26, 0, 8)
 		searchicon.BackgroundTransparency = 1
-		searchicon.Image = getcustomasset('pistonware/assets/new/search.png')
+		searchicon.Image = getcustomasset('Unreal/assets/new/search.png')
 		searchicon.ImageColor3 = color.Light(uipallet.Main, 0.37)
 		searchicon.Parent = searchbkg
 		local children = Instance.new('ScrollingFrame')
@@ -5750,7 +5750,7 @@ run(function()
 		textbuttonicon.Position = UDim2.fromScale(0.5, 0.5)
 		textbuttonicon.AnchorPoint = Vector2.new(0.5, 0.5)
 		textbuttonicon.BackgroundTransparency = 1
-		textbuttonicon.Image = getcustomasset('pistonware/assets/new/add.png')
+		textbuttonicon.Image = getcustomasset('Unreal/assets/new/add.png')
 		textbuttonicon.ImageColor3 = Color3.fromHSV(0.46, 0.96, 0.52)
 		textbuttonicon.Parent = textbutton
 		local childrenlist = Instance.new('Frame')
@@ -5843,7 +5843,7 @@ run(function()
 			close.Position = UDim2.new(1, -23, 0, 6)
 			close.BackgroundColor3 = Color3.new(1, 1, 1)
 			close.BackgroundTransparency = 1
-			close.Image = getcustomasset('pistonware/assets/new/closemini.png')
+			close.Image = getcustomasset('Unreal/assets/new/closemini.png')
 			close.ImageColor3 = color.Light(uipallet.Text, 0.2)
 			close.ImageTransparency = 0.5
 			close.AutoButtonColor = false
@@ -7545,8 +7545,8 @@ shared.bedwars = {
 }
 
 -- bedwars.lua is the ONLY file fetched from GitLab -- everything else comes from GitHub.
--- Note it sits at the REPO ROOT there (gitlab.com/pistonware/pistonware/bedwars.lua), even
--- though it is cached locally under pistonware/games/. It auto-updates: the sha of the latest
+-- Note it sits at the REPO ROOT there (gitlab.com/Unreal/Unreal/bedwars.lua), even
+-- though it is cached locally under Unreal/games/. It auto-updates: the sha of the latest
 -- commit that touched it is tracked in bedwarscheck.txt; whenever GitLab reports a newer
 -- commit, the file is silently re-downloaded (no prompt) and the sha re-recorded.
 
@@ -7554,7 +7554,7 @@ shared.bedwars = {
 -- GitLab's commits API names the sha field 'id' (GitHub/Codeberg call it 'sha').
 local function fetchBedwarsCommit()
     local suc, res = pcall(function()
-        return game:HttpGet('https://gitlab.com/api/v4/projects/pistonware%2Fpistonware/repository/commits?path=bedwars.lua&ref_name=main&per_page=1', true)
+        return game:HttpGet('https://gitlab.com/api/v4/projects/Unreal%2FUnreal/repository/commits?path=bedwars.lua&ref_name=main&per_page=1', true)
     end)
     if not (suc and res and res ~= '' and res ~= '404: Not Found') then return nil end
     local dsuc, body = pcall(function()
@@ -7569,15 +7569,15 @@ end
 -- 504s and eventually a full outage), hence the retries; the download is pinned to the exact
 -- commit sha so a fetch right after a push can't grab a stale CDN copy of the branch head.
 local function downloadBedwars()
-    local path = 'pistonware/games/bedwars.lua'
-    local checkPath = 'pistonware/games/bedwarscheck.txt'
+    local path = 'Unreal/games/bedwars.lua'
+    local checkPath = 'Unreal/games/bedwarscheck.txt'
 
     local cached = isfile(path) and readfile(path) or nil
     if cached and cached:gsub('%s', '') == '' then cached = nil end
 
     -- Developer mode: never touch the network -- run the local bedwars.lua exactly as-is so a
     -- dev can test unpushed edits without the auto-update overwriting them.
-    if shared.PistonwareDeveloper then
+    if shared.UnrealDeveloper then
         return cached
     end
 
@@ -7594,8 +7594,8 @@ local function downloadBedwars()
     for attempt = 1, 4 do
         local suc, res = pcall(function()
             local url = latest
-                and ('https://gitlab.com/pistonware/pistonware/-/raw/'..latest..'/bedwars.lua')
-                or 'https://gitlab.com/pistonware/pistonware/-/raw/main/bedwars.lua'
+                and ('https://github.com/woahwave/Unreal/-/raw/'..latest..'/bedwars.lua')
+                or 'https://github.com/woahwave/Unreal/-/raw/main/bedwars.lua'
             return game:HttpGet(url, true)
         end)
         -- loadstring compile check: during a host outage HttpGet can hand back the 503/error
@@ -7624,18 +7624,18 @@ if bedwarsSource then
     if bedwarsFn then
         local ok, err = pcall(bedwarsFn)
         if not ok then
-            warn('[pistonware] bedwars.lua errored while running: '..tostring(err))
+            warn('[Unreal] bedwars.lua errored while running: '..tostring(err))
         end
     else
         -- Doesn't compile: the cached copy is corrupt (a truncated write, or an error page
         -- cached by an older loader). Delete it so the next session redownloads instead of
         -- failing silently forever.
-        warn('[pistonware] cached bedwars.lua is corrupt, deleting it -- rejoin to redownload')
+        warn('[Unreal] cached bedwars.lua is corrupt, deleting it -- rejoin to redownload')
         pcall(function()
             if delfile then
-                delfile('pistonware/games/bedwars.lua')
+                delfile('Unreal/games/bedwars.lua')
             else
-                writefile('pistonware/games/bedwars.lua', '')
+                writefile('Unreal/games/bedwars.lua', '')
             end
         end)
         pcall(function()
@@ -7645,7 +7645,7 @@ if bedwarsSource then
 else
     -- Every attempt failed and there is no usable cache (fresh install during a host
     -- outage). Say so instead of silently loading without combat modules.
-    warn('[pistonware] bedwars.lua could not be downloaded -- the file host may be down')
+    warn('[Unreal] bedwars.lua could not be downloaded -- the file host may be down')
     pcall(function()
         vape:CreateNotification('Vape', 'Could not download bedwars.lua -- the file host may be down. Combat modules are unavailable; rejoin the game to retry.', 30, 'alert')
     end)

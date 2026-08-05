@@ -1,4 +1,4 @@
-local optionapi = {
+﻿local optionapi = {
 	Type = 'TwoSlider',
 	ValueMin = optionsettings.DefaultMin or optionsettings.Min,
 	ValueMax = optionsettings.DefaultMax or 10,
@@ -91,7 +91,7 @@ arrow.Name = 'Arrow'
 arrow.Size = UDim2.fromOffset(12, 6)
 arrow.Position = UDim2.new(1, -56, 0, 10)
 arrow.BackgroundTransparency = 1
-arrow.Image = getcustomasset('pistonware/assets/new/rangearrow.png')
+arrow.Image = getcustomasset('Unreal/assets/new/rangearrow.png')
 arrow.ImageColor3 = color.Light(uipallet.Main, 0.14)
 arrow.Parent = slider
 optionsettings.Function = optionsettings.Function or function() end
