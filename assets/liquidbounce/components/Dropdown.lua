@@ -1,4 +1,4 @@
-﻿local optionapi = {
+local optionapi = {
 	Type = 'Dropdown',
 	Value = optionsettings.List[1] or 'None',
 	Index = 0

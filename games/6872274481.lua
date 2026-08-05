@@ -1,4 +1,4 @@
-﻿local run = function(func) if shared.VapeSmoothBoot then task.wait() end func() end
+local run = function(func) if shared.VapeSmoothBoot then task.wait() end func() end
 
 local cloneref = cloneref or function(obj)
 	return obj

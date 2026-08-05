@@ -1,4 +1,4 @@
-﻿if shared.vape then
+if shared.vape then
 	pcall(function() shared.vape:Uninject() end)
 	shared.vape = nil
 end

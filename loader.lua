@@ -1,4 +1,4 @@
-﻿-- Two loader instances booting at once -- a double-tapped execute, or re-executing while
+-- Two loader instances booting at once -- a double-tapped execute, or re-executing while
 -- the first run is still holding on the ROBLOX loading screen -- would stack two identical
 -- consoles and run every prompt and download twice (the hidden one's questions then time
 -- out to their fallbacks and replay after the visible one closes). Later executions bail

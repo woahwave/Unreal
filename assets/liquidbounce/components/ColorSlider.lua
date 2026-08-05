@@ -1,4 +1,4 @@
-﻿local optionapi = {
+local optionapi = {
 	Type = 'ColorSlider',
 	Hue = optionsettings.DefaultHue or 0.44,
 	Sat = optionsettings.DefaultSat or 1,

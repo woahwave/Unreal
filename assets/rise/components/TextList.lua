@@ -1,4 +1,4 @@
-﻿local optionapi = {
+local optionapi = {
 	Type = 'TextList',
 	List = optionsettings.Default or {},
 	ListEnabled = optionsettings.Default or {},

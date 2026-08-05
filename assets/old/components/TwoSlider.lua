@@ -1,4 +1,4 @@
-﻿local optionapi = {
+local optionapi = {
 	Type = 'TwoSlider',
 	ValueMin = optionsettings.DefaultMin or optionsettings.Min,
 	ValueMax = optionsettings.DefaultMax or 10,

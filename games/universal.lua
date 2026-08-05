@@ -1,4 +1,4 @@
-﻿local loadstring = function(...)
+local loadstring = function(...)
 	local res, err = loadstring(...)
 	if err and vape then
 		vape:CreateNotification('Unreal', 'Failed to load : '..err, 30, 'alert')

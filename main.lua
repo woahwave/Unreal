@@ -1,4 +1,4 @@
-﻿-- pcall'd: after a teleport shared.vape can still point at the previous server's instance,
+-- pcall'd: after a teleport shared.vape can still point at the previous server's instance,
 -- whose GUI and connections no longer exist. An error walking that corpse would abort main.lua
 -- on line one and leave the queued re-injection doing nothing at all.
 if shared.vape then pcall(function() shared.vape:Uninject() end) end

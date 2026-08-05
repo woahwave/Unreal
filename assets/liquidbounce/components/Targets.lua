@@ -1,4 +1,4 @@
-﻿local optionapi = {
+local optionapi = {
 	Type = 'Targets',
 	Index = getTableSize(api.Options)
 }
